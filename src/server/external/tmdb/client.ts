@@ -59,8 +59,18 @@ export async function fetchMovieList(path: string, revalidate = 900) {
 
 import type { MovieDetail } from "@/types/movie";
 
+type TmdbCast = { id: number; name: string; character: string; profile_path: string | null };
+type TmdbCrew = { id: number; name: string; job: string; profile_path: string | null };
+type TmdbVideo = { id: string; site: string; key: string; name: string; type: string; official: boolean };
+
+type TmdbMovieDetailResponse = TmdbMovie & {
+  credits?: { cast: TmdbCast[]; crew: TmdbCrew[] };
+  videos?: { results: TmdbVideo[] };
+  similar?: { results: TmdbMovie[] };
+};
+
 export async function fetchMovieDetail(tmdbId: number): Promise<MovieDetail> {
-  const movie = await tmdbFetch<any>(`/movie/${tmdbId}?append_to_response=credits,videos,watch/providers,similar`, {
+  const movie = await tmdbFetch<TmdbMovieDetailResponse>(`/movie/${tmdbId}?append_to_response=credits,videos,watch/providers,similar`, {
     revalidate: 60 * 60 * 12
   });
   
@@ -68,19 +78,19 @@ export async function fetchMovieDetail(tmdbId: number): Promise<MovieDetail> {
   
   return {
     ...summary,
-    cast: (movie.credits?.cast || []).map((c: any) => ({
+    cast: (movie.credits?.cast || []).map((c) => ({
       id: `cast-${c.id}`,
       name: c.name,
       character: c.character,
       profilePath: imageUrl(c.profile_path, "w500")
     })),
-    crew: (movie.credits?.crew || []).map((c: any) => ({
+    crew: (movie.credits?.crew || []).map((c) => ({
       id: `crew-${c.id}-${c.job}`,
       name: c.name,
       job: c.job,
       profilePath: imageUrl(c.profile_path, "w500")
     })),
-    videos: (movie.videos?.results || []).map((v: any) => ({
+    videos: (movie.videos?.results || []).map((v) => ({
       id: v.id,
       site: v.site,
       key: v.key,
@@ -91,7 +101,7 @@ export async function fetchMovieDetail(tmdbId: number): Promise<MovieDetail> {
     locations: [],
     ratingTrend: [],
     popularityTrend: [],
-    similar: (movie.similar?.results || []).map((m: any) => mapTmdbMovie(m))
+    similar: (movie.similar?.results || []).map((m) => mapTmdbMovie(m))
   };
 }
 

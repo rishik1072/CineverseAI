@@ -1,23 +1,16 @@
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: cineverse-postgres
+  db:
+    image: postgres:16
+    container_name: cineverse-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: cineverse
-      POSTGRES_PASSWORD: cineverse
+      POSTGRES_PASSWORD: cineverse_pwd
       POSTGRES_DB: cineverse
     ports:
       - "5432:5432"
     volumes:
-      - cineverse_postgres_data:/var/lib/postgresql/data
-
-  redis:
-    image: redis:7-alpine
-    container_name: cineverse-redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
-  cineverse_postgres_data:
+  pgdata:

@@ -3,12 +3,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { Swords } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import type { MovieDetail } from "@/types/movie";
+import type { MovieDetail, MovieSummary } from "@/types/movie";
 
 type CompareResponse = {
   ok: boolean;
@@ -23,7 +24,7 @@ async function compare(movieA: number, movieB: number): Promise<CompareResponse>
 
 function MovieSearchInput({ value, onChange, placeholder }: { value: string; onChange: (val: string) => void; placeholder: string }) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<MovieSummary[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -37,7 +38,9 @@ function MovieSearchInput({ value, onChange, placeholder }: { value: string; onC
         const res = await fetch(`/api/movies/search?query=${encodeURIComponent(query)}`);
         const json = await res.json();
         if (json.ok) setResults(json.data);
-      } catch (e) {}
+      } catch {
+        // Ignored
+      }
     }, 300);
     return () => clearTimeout(delay);
   }, [query]);
@@ -78,9 +81,11 @@ function MovieSearchInput({ value, onChange, placeholder }: { value: string; onC
                 }}
               >
                 {movie.posterPath ? (
-                  <img src={movie.posterPath} alt="" className="h-10 w-7 rounded object-cover" />
+                  <div className="relative h-10 w-7 shrink-0">
+                    <Image src={movie.posterPath} alt={movie.title} fill sizes="28px" className="rounded object-cover" />
+                  </div>
                 ) : (
-                  <div className="h-10 w-7 rounded bg-slate-800" />
+                  <div className="h-10 w-7 shrink-0 rounded bg-slate-800" />
                 )}
                 <div className="overflow-hidden">
                   <p className="truncate font-medium">{movie.title}</p>
@@ -124,7 +129,9 @@ export function MovieBattleClient() {
               <CardContent className="p-6 text-center">
                 <p className="text-sm uppercase tracking-widest text-slate-400">Contender {index + 1}</p>
                 {movie.posterPath ? (
-                  <img src={movie.posterPath} alt={movie.title} className="mx-auto mt-4 h-48 rounded-md object-cover shadow-lg" />
+                  <div className="relative mx-auto mt-4 h-48 w-32 shrink-0">
+                    <Image src={movie.posterPath} alt={movie.title} fill sizes="128px" className="rounded-md object-cover shadow-lg" />
+                  </div>
                 ) : null}
                 <h2 className="mt-4 text-2xl font-black leading-tight">{movie.title}</h2>
                 <div className="mt-4 text-5xl font-black text-gradient-neon">{index === 0 ? result.scoreA : result.scoreB}</div>

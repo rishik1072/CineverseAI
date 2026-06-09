@@ -1,0 +1,17 @@
+
+> cineverse-ai@1.0.0 dev /home/user
+> next dev "--hostname" "0.0.0.0"
+
+   ▲ Next.js 15.5.19
+   - Local:        http://localhost:3000
+   - Network:      http://0.0.0.0:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ webpackMemoryOptimizations
+
+ ✓ Starting...
+ ✓ Ready in 1452ms
+ ○ Compiling / ...
+ ✓ Compiled / in 10.9s (1828 modules)
+ HEAD / 200 in 12127ms
+ HEAD / 200 in 332ms

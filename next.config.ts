@@ -2,7 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  output: "standalone",
+  // Note: output: "standalone" is for self-hosted Docker deployments only.
+  // Vercel uses its own output format — setting this here causes EPERM symlink
+  // failures on Windows with pnpm and provides no benefit on Vercel.
+  // Re-enable only if you need Docker/self-hosted deployment.
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "image.tmdb.org" },

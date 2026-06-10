@@ -16,13 +16,19 @@ type CompareResponse = {
   data: { movieA: MovieDetail; movieB: MovieDetail; scoreA: number; scoreB: number; winner: MovieDetail | null; metrics: Array<{ label: string; a: number; b: number }> };
 };
 
+interface MovieSearchInputProps {
+  value: string;
+  onChange: (val: string) => void;
+  placeholder: string;
+}
+
 async function compare(movieA: number, movieB: number): Promise<CompareResponse> {
   const response = await fetch("/api/movies/compare", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ movieA, movieB }) });
   if (!response.ok) throw new Error("Sign in to save movie comparisons");
   return response.json();
 }
 
-function MovieSearchInput({ value, onChange, placeholder }: { value: string; onChange: (val: string) => void; placeholder: string }) {
+function MovieSearchInput({ value, onChange, placeholder }: MovieSearchInputProps): React.ReactElement {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<MovieSummary[]>([]);
   const [isOpen, setIsOpen] = useState(false);

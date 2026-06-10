@@ -5,6 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import type { MovieSummary } from "@/types/movie";
 
 export function AIRecommendations({ movies }: { movies: MovieSummary[] }) {
+  const safeMovies = movies ?? [];
+  
   return (
     <section className="cinema-container py-12">
       <Card className="relative overflow-hidden">
@@ -19,7 +21,7 @@ export function AIRecommendations({ movies }: { movies: MovieSummary[] }) {
               Recommendation ranking blends watchlists, favorites, ratings, genre affinity, recency, and cinematic mood signals.
             </p>
           </div>
-          <MovieRail title="Because your taste is evolving" movies={movies} />
+          <MovieRail title="Because your taste is evolving" movies={safeMovies} />
         </CardContent>
       </Card>
     </section>

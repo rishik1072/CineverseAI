@@ -1,6 +1,8 @@
 import Image from "next/image";
 
 export function PopularActors({ actors }: { actors: Array<{ id: string; name: string; role: string; image: string }> }) {
+  const safeActors = actors ?? [];
+  
   return (
     <section className="cinema-container py-14">
       <div className="mb-8">
@@ -8,7 +10,7 @@ export function PopularActors({ actors }: { actors: Array<{ id: string; name: st
         <h2 className="text-3xl font-black md:text-4xl">Popular actors</h2>
       </div>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {actors.map((actor) => (
+        {safeActors.map((actor) => (
           <article key={actor.id} className="group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.05] p-4 backdrop-blur-2xl transition hover:-translate-y-2 hover:border-fuchsia-300/40">
             <div className="relative aspect-square overflow-hidden rounded-2xl bg-slate-900">
               <Image src={actor.image} alt={actor.name} fill sizes="300px" className="object-cover transition duration-700 group-hover:scale-110" />

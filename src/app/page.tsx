@@ -35,18 +35,25 @@ export default async function HomePage() {
     getPopularActors()
   ]);
 
-  const heroMovie: MovieSummary = trending.length > 0 ? trending[0]! : FALLBACK_HERO_MOVIE;
+  // Ensure all arrays have fallback values
+  const safeHeroMovie: MovieSummary = (trending && trending.length > 0) ? trending[0]! : FALLBACK_HERO_MOVIE;
+  const safeTrending = trending && trending.length > 0 ? trending : [];
+  const safeRecommendations = recommendations && recommendations.length > 0 ? recommendations : [];
+  const safeTopRated = topRated && topRated.length > 0 ? topRated : [];
+  const safeUpcoming = upcoming && upcoming.length > 0 ? upcoming : [];
+  const safePopular = popular && popular.length > 0 ? popular : [];
+  const safeActors = actors && actors.length > 0 ? actors : [];
 
   return (
     <main>
-      <HeroSection movie={heroMovie} />
-      <MovieRail title="Trending movies" eyebrow="Infinite discovery rail" movies={trending} href="/search?sort=popularity" />
-      <AIRecommendations movies={recommendations.slice(0, 8)} />
-      <MovieRail title="Top rated movies" eyebrow="Critically loved" movies={topRated} href="/search?sort=rating" />
-      <MovieRail title="Upcoming releases" eyebrow="Release radar" movies={upcoming} href="/search?sort=release_date" />
+      <HeroSection movie={safeHeroMovie} />
+      <MovieRail title="Trending movies" eyebrow="Infinite discovery rail" movies={safeTrending} href="/search?sort=popularity" />
+      <AIRecommendations movies={safeRecommendations.slice(0, 8)} />
+      <MovieRail title="Top rated movies" eyebrow="Critically loved" movies={safeTopRated} href="/search?sort=rating" />
+      <MovieRail title="Upcoming releases" eyebrow="Release radar" movies={safeUpcoming} href="/search?sort=release_date" />
       <StreamingSection />
-      <PopularActors actors={actors} />
-      <MovieRail title="Popular now" eyebrow="Audience heat" movies={popular} href="/search?sort=popularity" />
+      <PopularActors actors={safeActors} />
+      <MovieRail title="Popular now" eyebrow="Audience heat" movies={safePopular} href="/search?sort=popularity" />
       <UniversePreview />
     </main>
   );

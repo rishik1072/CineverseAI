@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import type { MovieSummary } from "@/types/movie";
 
 export function MovieRail({ title, eyebrow, movies, href }: { title: string; eyebrow?: string; movies: MovieSummary[]; href?: string }) {
+  const safeMovies = movies ?? [];
+  
   return (
     <GsapScrollReveal className="py-10">
       <div className="cinema-container">
@@ -25,7 +27,7 @@ export function MovieRail({ title, eyebrow, movies, href }: { title: string; eye
           )}
         </div>
         <div className="scrollbar-none flex gap-5 overflow-x-auto pb-6">
-          {movies.map((movie, index) => (
+          {safeMovies.map((movie, index) => (
             <MovieCard3D key={movie.tmdbId}>
               <MovieCard movie={movie} priority={index < 2} />
             </MovieCard3D>

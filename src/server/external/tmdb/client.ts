@@ -6,7 +6,9 @@ const TMDB_BASE = process.env.TMDB_API_BASE_URL ?? "https://api.themoviedb.org/3
 const TMDB_IMAGE_BASE = process.env.TMDB_IMAGE_BASE_URL ?? "https://image.tmdb.org/t/p";
 
 function logTmdbWarning(message: string, details?: unknown) {
-  console.warn(`[TMDB] ${message}`, details ?? "");
+  if (process.env.NODE_ENV === "development") {
+    console.warn(`[TMDB] ${message}`, details ?? "");
+  }
 }
 
 function imageUrl(path: string | null | undefined, size: "w500" | "original" = "original") {

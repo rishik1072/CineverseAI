@@ -14,7 +14,9 @@ export async function GET(request: Request) {
     // Limit to 5 results for the autocomplete
     return NextResponse.json({ ok: true, data: movies.slice(0, 5) });
   } catch (error) {
-    console.error("Search API error:", error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Search API error:", error);
+    }
     return NextResponse.json({ ok: false, error: "Internal Server Error" }, { status: 500 });
   }
 }

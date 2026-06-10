@@ -38,7 +38,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [...staticEntries, ...movieEntries];
   } catch (error) {
-    console.warn("[sitemap] Failed to fetch popular movies for sitemap. Falling back to static sitemap entries.", error);
+    if (process.env.NODE_ENV === "development") {
+      console.warn("[sitemap] Failed to fetch popular movies for sitemap. Falling back to static sitemap entries.", error);
+    }
     return staticEntries;
   }
 }
